@@ -61,8 +61,8 @@ def registerPlayer(name):
 def playerStandings():
     """Returns a list of the players and their win records, sorted by wins.
 
-    The first entry in the list should be the player in first place, or a player
-    tied for first place if there is currently a tie.
+    The first entry in the list should be the player in first place, or a
+    player tied for first place if there is currently a tie.
 
     Returns:
       A list of tuples, each of which contains (id, name, wins, matches):
@@ -73,10 +73,18 @@ def playerStandings():
     """
     DB = connect()
     cur = DB.cursor()
-    cur.execute("SELECT id,name,wins,matches FROM players ORDER BY wins desc")
+    cur.execute("SELECT players.id,players.name,count(match_results.winner) AS wins,\
+                (SELECT count(*) FROM match_results \
+                    WHERE players.id=match_results.winner \
+                    OR players.id=match_results.loser) AS matches \
+                FROM players LEFT JOIN match_results \
+                ON players.id=match_results.winner \
+                GROUP BY players.id \
+                ORDER BY wins DESC")
     standings = cur.fetchall()
     print standings
-    DB.close   
+    DB.close
+    return standings
 
 
 def reportMatch(winner, loser):
@@ -86,6 +94,16 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
+    DB = connect()
+    cur = DB.cursor()
+    # cur.execute("UPDATE players set wins=wins+1,matches=matches+1 \
+    #             where id=%s", (winner,))
+    # cur.execute("UPDATE players set matches=matches+1 where id=%s",
+    #             (loser,))
+    cur.execute("INSERT INTO match_results (winner,loser) values (%s,%s)",
+                (winner, loser))
+    DB.commit()
+    DB.close
 
 
 def swissPairings():
@@ -103,3 +121,4 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+

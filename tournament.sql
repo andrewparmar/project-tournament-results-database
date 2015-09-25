@@ -16,8 +16,8 @@ DROP TABLE IF EXISTS match_results;
 
 CREATE TABLE players ( id SERIAL PRIMARY KEY,
 					   name TEXT,
-                       wins INTEGER DEFAULT 0,
-                       matches INTEGER DEFAULT 0,
+                       -- wins INTEGER DEFAULT 0,
+                       -- matches INTEGER DEFAULT 0,
                        time TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
 
 -- CREATE TABLE players ( id SERIAL PRIMARY KEY,

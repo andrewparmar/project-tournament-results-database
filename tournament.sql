@@ -6,8 +6,8 @@
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
 
--- DROP DATABASE IF EXISTS tournament;
--- CREATE DATABASE tournament;
+DROP DATABASE IF EXISTS tournament;
+CREATE DATABASE tournament;
 
 \c tournament;
 
@@ -20,6 +20,17 @@ CREATE TABLE players ( id SERIAL PRIMARY KEY,
                        -- matches INTEGER DEFAULT 0,
                        time TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
 
+
+CREATE TABLE match_results ( game_id SERIAL PRIMARY KEY,
+					 		 winner INTEGER,
+					 		 loser INTEGER,
+                     		 time TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
+
+-- CREATE TABLE match_results ( id SERIAL PRIMARY KEY,
+-- 					 		 wins INTEGER ,
+--                        		 matches INTEGER ,
+--                      		 time TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
+
 -- CREATE TABLE players ( id SERIAL PRIMARY KEY,
 -- 					   name TEXT,
 
@@ -31,14 +42,3 @@ CREATE TABLE players ( id SERIAL PRIMARY KEY,
 -- 					 player2 TEXT,
 --                      winner INTEGER,
 --                      time TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
-
-
-CREATE TABLE match_results ( game_id SERIAL PRIMARY KEY,
-					 		 winner INTEGER,
-					 		 loser INTEGER,
-                     		 time TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
-
--- CREATE TABLE match_results ( id SERIAL PRIMARY KEY,
--- 					 		 wins INTEGER ,
---                        		 matches INTEGER ,
---                      		 time TIMESTAMP DEFAULT CURRENT_TIMESTAMP );

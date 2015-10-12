@@ -90,7 +90,7 @@ def testReportMatches():
     [id1, id2, id3, id4] = [row[0] for row in standings]
     reportMatch(id1, id2)
     reportMatch(id3, id4)
-    print "Pass"
+    # print "Pass"
     standings = playerStandings()
     for (i, n, w, m) in standings:
         if m != 1:
@@ -136,5 +136,3 @@ if __name__ == '__main__':
     testReportMatches()
     testPairings()
     print "Success!  All tests pass!"
-
-

@@ -53,7 +53,7 @@ def registerPlayer(name):
     """
     DB = connect()
     cur = DB.cursor()
-    cur.execute("INSERT INTO players (name) values (%s)", (name,))
+    cur.execute("INSERT INTO players (name) VALUES (%s)", (name,))
     DB.commit()
     DB.close
 
@@ -73,21 +73,22 @@ def playerStandings():
     """
     DB = connect()
     cur = DB.cursor()
-    cur.execute("SELECT players.id,players.name,count(match_results.winner) AS wins,\
-                (SELECT count(*) FROM match_results \
+    cur.execute("SELECT players.id,players.name,\
+                CAST(count(match_results.winner) AS INTEGER) AS wins,\
+                (SELECT cast(count(*) AS INTEGER) FROM match_results \
                     WHERE players.id=match_results.winner \
                     OR players.id=match_results.loser) AS matches \
                 FROM players LEFT JOIN match_results \
                 ON players.id=match_results.winner \
                 GROUP BY players.id \
-                ORDER BY wins DESC")
+                ORDER BY wins DESC;")
     standings = cur.fetchall()
-    print standings
+    # print standings
     DB.close
     return standings
 
 
-def reportMatch(winner, loser):
+def reportMatch(winner, loser, draw=False):
     """Records the outcome of a single match between two players.
 
     Args:
@@ -100,8 +101,14 @@ def reportMatch(winner, loser):
     #             where id=%s", (winner,))
     # cur.execute("UPDATE players set matches=matches+1 where id=%s",
     #             (loser,))
-    cur.execute("INSERT INTO match_results (winner,loser) values (%s,%s)",
-                (winner, loser))
+    if draw:
+        cur.execute("INSERT INTO match_results (winner,loser) VALUES (%s,%s)",
+                    (winner, 0))
+        cur.execute("INSERT INTO match_results (winner,loser) VALUES (%s,%s)",
+                    (loser, 0))
+    else:
+        cur.execute("INSERT INTO match_results (winner,loser) VALUES (%s,%s)",
+                    (winner, loser))
     DB.commit()
     DB.close
 
@@ -122,3 +129,7 @@ def swissPairings():
         name2: the second player's name
     """
 
+    standings = playerStandings()
+    print standings
+
+swissPairings()

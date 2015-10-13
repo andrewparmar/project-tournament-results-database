@@ -16,6 +16,7 @@ Note: Assumption here is that you already have psql insatlled 1.9+ installed in 
 1. Clone the repository
 2. Use CLI to run the `psql => \i tournament.sql` command. This will setup the database and required tables.
 3. Run the test file in an IDE or on CLI via `python tournament_test.py` to test that the application is running. The output should be the following
+
 '''
 1. Old matches can be deleted.
 2. Player records can be deleted.

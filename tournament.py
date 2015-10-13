@@ -97,10 +97,7 @@ def reportMatch(winner, loser, draw=False):
     """
     DB = connect()
     cur = DB.cursor()
-    # cur.execute("UPDATE players set wins=wins+1,matches=matches+1 \
-    #             where id=%s", (winner,))
-    # cur.execute("UPDATE players set matches=matches+1 where id=%s",
-    #             (loser,))
+
     if draw:
         cur.execute("INSERT INTO match_results (winner,loser) VALUES (%s,%s)",
                     (winner, 0))
@@ -130,6 +127,11 @@ def swissPairings():
     """
 
     standings = playerStandings()
-    print standings
-
-swissPairings()
+    pairs = []
+    n = 0
+    while n < len(standings):
+        k = n + 1
+        pairs.append((standings[n][0], standings[n][1],
+                      standings[k][0], standings[k][1]))
+        n = n + 2
+    return pairs
